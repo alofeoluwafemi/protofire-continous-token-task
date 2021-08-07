@@ -14,18 +14,28 @@ contract ContinousToken is BancorFormula, Ownable, ERC20 {
     uint256 public reserveRatio;
     address public reserveTokenAddress;
 
+    /**
+     * @dev Fired when TOK is exchanged for Dai
+     */
     event ContinuousBurn(
         address _address,
         uint256 continuousTokenAmount,
         uint256 reserveTokenAmount
     );
 
+    /**
+     * @dev Fired when Dai us exchanged for TOK
+     */
     event ContinuousMint(
         address _address,
         uint256 reserveTokenAmount,
         uint256 continuousTokenAmount
     );
 
+    /**
+     * @param _reserveRatio(RR) to determine the bonding curve to be used. 50% RR = Linear Bonding Curve, 10% RR = Exponential Bonding Curve
+     * @param _reserveTokenAddress Contract address of ERC20 Token to use as reserve/exchange of value e.g DAI
+     */
     constructor(uint256 _reserveRatio, address _reserveTokenAddress)
         ERC20("Continous Token", "TOK")
     {
@@ -34,18 +44,43 @@ contract ContinousToken is BancorFormula, Ownable, ERC20 {
         _mint(msg.sender, 1 * scale);
     }
 
-    function mint() public payable {
-        require(msg.value > 0, "Must send DAI to buy tokens.");
-        _continuousMint(msg.value);
+    /**
+     * @dev Mint some TOK token by allowing contract to spend an amount of caller reserve tokens
+     * @param _amount Number of reserve token approved for this contract to convert to TOK tokens
+     */
+    function mint(uint256 _amount) public returns (uint256 _amountMinted) {
+        uint256 allowance = IERC20(reserveTokenAddress).allowance(
+            msg.sender,
+            address(this)
+        );
+
+        require(allowance > 0, "Must approve DAI to buy tokens.");
+        require(allowance >= _amount, "Must approve enough DAI to buy tokens.");
+
+        bool success = IERC20(reserveTokenAddress).transferFrom(
+            msg.sender,
+            address(this),
+            allowance
+        );
+
+        if (success) {
+            return _continuousMint(allowance);
+        } else {
+            require(allowance > 0, "Failed to transfer Dai tokens");
+        }
     }
 
+    /**
+     * @dev Burn some TOK token and return reserve token based on current curve price
+     * @param _amount Number of TOK token to convert to reserve tokens
+     */
     function burn(uint256 _amount) public {
         uint256 returnAmount = _continuousBurn(_amount);
         IERC20(reserveTokenAddress).transfer(msg.sender, returnAmount);
     }
 
     receive() external payable {
-        mint();
+        //Sink
     }
 
     function calculateContinuousMintReturn(uint256 _amount)

@@ -8,8 +8,22 @@ const daiContract = new ethers.Contract(daiAddress, daiAbi, provider).connect(wa
 const ContinousToken = artifacts.require("ContinousToken");
 
 
-contract("ContinousToken", async ([deployer, account1, account2]) => {
+contract("LinearCurveBondToken", async ([deployer, account1, account2]) => {
 
-   
+    const fiveDaiInWei = ethers.utils.parseEther("5");
 
+    before(async () => {
+        linearCurveBondToken = await ContinousToken.new(500000, daiAddress);    //1/2 * MAX_WEIGHT = 500000 RR
+    });
+
+
+    it("should cost 2 Dai for this purchase", async () => {
+
+        //await daiContract.approve(linearCurveBondToken.address, fiveDaiInWei);
+        //await linearCurveBondToken.mint(fiveDaiInWei);
+
+        const price = await linearCurveBondToken.calculateContinuousMintReturn(100);
+
+        console.log('Following:', ethers.utils.formatUnits(price));
+      });
 });
