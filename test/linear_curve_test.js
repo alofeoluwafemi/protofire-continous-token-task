@@ -47,7 +47,7 @@ contract("LinearCurveBondToken", async ([deployer, account1, account2]) => {
 
         console.log('Following:', nMinus1.toString(), n.toString(), nPlus1.toString());
         assert.isAbove(n, nMinus1, "n is not more than nMinus1");
-        assert.isBelow(n, nPlus1, "n is not less than nPlus1");
+        assert.isBelow(n, nPlus1, "n is less than nPlus1");
       });
 
 
