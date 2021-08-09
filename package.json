@@ -14,6 +14,7 @@
   "dependencies": {
     "@openzeppelin/contracts": "^4.2.0",
     "@truffle/hdwallet-provider": "^1.4.3",
-    "ethers": "^5.4.4"
+    "ethers": "^5.4.4",
+    "solidity-coverage": "^0.7.16"
   }
 }

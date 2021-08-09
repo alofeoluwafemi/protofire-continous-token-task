@@ -29,10 +29,10 @@ contract("LinearCurveBondToken", async ([deployer, account1, account2]) => {
   const fiveEtherInWei = ethers.utils.parseEther("5");
 
   before(async () => {
-    linearCurveBondToken = await ContinousToken.at(
-      "0xb866e00d93193798d44b5eb1a164d9e809fcfec5"
-    );
-    //linearCurveBondToken = await ContinousToken.new(500000, daiAddress);    //1/2 * MAX_WEIGHT = 500000 RR
+    // linearCurveBondToken = await ContinousToken.at(
+    //   "0xb866e00d93193798d44b5eb1a164d9e809fcfec5"
+    // );
+    linearCurveBondToken = await ContinousToken.new(500000, daiAddress);    //1/2 * MAX_WEIGHT = 500000 RR
     linearCurveBondTokenAddress = linearCurveBondToken.address;
   });
 

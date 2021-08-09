@@ -55,7 +55,7 @@ contract ContinousToken is BancorFormula, Ownable, ERC20 {
         );
 
         require(allowance > 0, "Must approve DAI to buy tokens.");
-        require(allowance >= _amount, "Must approve enough DAI to buy tokens.");
+        require(allowance >= _amount, "Must approve enough DAI.");
 
         bool success = IERC20(reserveTokenAddress).transferFrom(
             msg.sender,
