@@ -12,7 +12,23 @@ contract ContinousToken is BancorFormula, ERC20 {
     uint256 public reserveRatio;
     address public reserveTokenAddress;
 
-    event EtherReceived(address _address, uint256 value);
+    /**
+     * @dev Fired when TOK is exchanged for Dai
+     */
+    event ContinuousBurn(
+        address _address,
+        uint256 continuousTokenAmount,
+        uint256 reserveTokenAmount
+    );
+
+    /**
+     * @dev Fired when Dai us exchanged for TOK
+     */
+    event ContinuousMint(
+        address _address,
+        uint256 reserveTokenAmount,
+        uint256 continuousTokenAmount
+    );
 
     /**
      * @param _reserveRatio(RR) to determine the bonding curve to be used. 50% RR = Linear Bonding Curve, 10% RR = Exponential Bonding Curve
@@ -95,7 +111,7 @@ contract ContinousToken is BancorFormula, ERC20 {
         uint256 amount = calculateContinuousMintReturn(_deposit);
         _mint(msg.sender, amount);
         reserveBalance = reserveBalance.add(_deposit);
-
+        emit ContinuousMint(msg.sender, amount, _deposit);
         return amount;
     }
 
@@ -109,7 +125,7 @@ contract ContinousToken is BancorFormula, ERC20 {
         uint256 reimburseAmount = calculateContinuousBurnReturn(_amount);
         _burn(msg.sender, _amount);
         reserveBalance = reserveBalance.sub(reimburseAmount);
-
+        emit ContinuousBurn(msg.sender, _amount, reimburseAmount);
         return reimburseAmount;
     }
 }
