@@ -29,9 +29,9 @@ Copy `secret.example.json` to `secret.json` and replace the details with yours
 
 Run `truffle console --network rinkeby`
 
-Run `test linear_curve_test.js` for Linear Bond Curve Token
+Run `test test/linear_curve_test.js` for Linear Bond Curve Token
 
-Run `test exponential_curve_test.js` for Exponential Bond Curve Token
+Run `test test/exponential_curve_test.js` for Exponential Bond Curve Token
 
 ## References
 

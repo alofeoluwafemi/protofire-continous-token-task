@@ -1,42 +1,33 @@
-const daiAddress = "0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea";
-const daiAbi = require("../scripts/abis/dai.json");
 const {
-  mnemonic,
-  infura_id,
-  private_key_address_1,
-  private_key_address_2,
-  private_key_address_3,
-} = require("../secret.json");
-const { ethers } = require("ethers");
-const provider = new ethers.providers.JsonRpcProvider(
-  `https://rinkeby.infura.io/v3/${infura_id}`
-);
-const deployerWallet = new ethers.Wallet(private_key_address_1).connect(
-  provider
-);
-const account1Wallet = new ethers.Wallet(private_key_address_2).connect(
-  provider
-);
-const account2Wallet = new ethers.Wallet(private_key_address_3).connect(
-  provider
-);
-const daiContract = new ethers.Contract(daiAddress, daiAbi, provider);
-const ContinousToken = artifacts.require("ContinousToken");
+  daiAddress,
+  ethers,
+  deployerWallet,
+  account1Wallet,
+  account2Wallet,
+  ContinousToken,
+  GanacheDaiToken,
+  provider,
+  daiAbi,
+  isDev
+} = require('../scripts/helpers/common');
 
 contract("LinearCurveBondToken", async ([deployer, account1, account2]) => {
-  let linearCurveBondToken, linearCurveBondTokenAddress;
+
+  let linearCurveBondToken, linearCurveBondTokenAddress, ganacheDaiToken, daiAddress;
 
   const fiveEtherInWei = ethers.utils.parseEther("5");
 
   before(async () => {
-    // linearCurveBondToken = await ContinousToken.at(
-    //   "0xb866e00d93193798d44b5eb1a164d9e809fcfec5"
-    // );
+     ganacheDaiToken = await GanacheDaiToken.new([deployerWallet.address, account1Wallet.address, account2Wallet.address]);
+     daiAddress = isDev ? ganacheDaiToken.address : "0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea";
+    
     linearCurveBondToken = await ContinousToken.new(500000, daiAddress);    //1/2 * MAX_WEIGHT = 500000 RR
     linearCurveBondTokenAddress = linearCurveBondToken.address;
   });
 
   it("should verify quantity nMunis1 is greater than quantity n and quantity n+1 is less than quantity n", async () => {
+
+    const daiContract = new ethers.Contract(daiAddress, daiAbi, provider);
     const nMinus1 = await linearCurveBondToken.calculateContinuousMintReturn(
       fiveEtherInWei
     );

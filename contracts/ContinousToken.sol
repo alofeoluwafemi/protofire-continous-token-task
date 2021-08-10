@@ -1,12 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
 import "./curves/BancorFormula.sol";
 
-contract ContinousToken is BancorFormula, Ownable, ERC20 {
+contract ContinousToken is BancorFormula, ERC20 {
     using SafeMath for uint256;
 
     uint256 public scale = 10**18;
@@ -14,23 +12,7 @@ contract ContinousToken is BancorFormula, Ownable, ERC20 {
     uint256 public reserveRatio;
     address public reserveTokenAddress;
 
-    /**
-     * @dev Fired when TOK is exchanged for Dai
-     */
-    event ContinuousBurn(
-        address _address,
-        uint256 continuousTokenAmount,
-        uint256 reserveTokenAmount
-    );
-
-    /**
-     * @dev Fired when Dai us exchanged for TOK
-     */
-    event ContinuousMint(
-        address _address,
-        uint256 reserveTokenAmount,
-        uint256 continuousTokenAmount
-    );
+    event EtherReceived(address _address, uint256 value);
 
     /**
      * @param _reserveRatio(RR) to determine the bonding curve to be used. 50% RR = Linear Bonding Curve, 10% RR = Exponential Bonding Curve
@@ -79,10 +61,6 @@ contract ContinousToken is BancorFormula, Ownable, ERC20 {
         IERC20(reserveTokenAddress).transfer(msg.sender, returnAmount);
     }
 
-    receive() external payable {
-        //Sink
-    }
-
     function calculateContinuousMintReturn(uint256 _amount)
         public
         view
@@ -118,8 +96,6 @@ contract ContinousToken is BancorFormula, Ownable, ERC20 {
         _mint(msg.sender, amount);
         reserveBalance = reserveBalance.add(_deposit);
 
-        emit ContinuousMint(msg.sender, amount, _deposit);
-
         return amount;
     }
 
@@ -133,8 +109,6 @@ contract ContinousToken is BancorFormula, Ownable, ERC20 {
         uint256 reimburseAmount = calculateContinuousBurnReturn(_amount);
         _burn(msg.sender, _amount);
         reserveBalance = reserveBalance.sub(reimburseAmount);
-
-        emit ContinuousBurn(msg.sender, _amount, reimburseAmount);
 
         return reimburseAmount;
     }
