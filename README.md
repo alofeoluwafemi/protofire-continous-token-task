@@ -7,7 +7,7 @@ You must have the following installed on your Machine to run this code:
 - NPM
 - Truffle
 
-## Setup Process (Rinkeby)
+## Setup
 
 - First clone this repository `git clone https://github.com/slim12kg/protofire-continous-token-task.git`
 
@@ -15,23 +15,9 @@ You must have the following installed on your Machine to run this code:
 
 - Run `npm install`
 
-- Request 7.5 Ethers from the rinkeby faucet https://faucet.rinkeby.io/ from your metamask wallet
-
-- Visit https://app.compound.finance/ to borrow atleast 500 Dai with your test Ether from your metamask wallet
-
-- Add Dai token to your metamask wallet using this contract address `0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea`
-
-- Spread 1 Ether each to the first 3 addresses on your Metamask wallet, and 250 Dai each also.
-
-- Get an Infura API key if don't have one from https://infura.io/
-
 - Copy `secret.example.json` to `secret.json` and replace the details with yours
 
-- Run `truffle console --network rinkeby`
-
-- Run `test test/linear_curve_test.js` for Linear Bond Curve Token
-
-## Setup Option 2 (Ganache)
+## Test Option 1 (Ganache)
 
 - Run everything locally using ganache-cli, and skip requesting Ether and Dai process
 
@@ -44,6 +30,22 @@ ganache-cli \
 ```
 
 - Replace the mnemonic passed to the `-m` option with your own mnemonic and add the same mnemonic to the `secret.json` file
+
+- Run `test test/linear_curve_test.js` for Linear Bond Curve Token
+
+## Test Option 2 (Rinkeby)
+
+- Request 7.5 Ethers from the rinkeby faucet https://faucet.rinkeby.io/ from your metamask wallet
+
+- Visit https://app.compound.finance/ to borrow atleast 500 Dai with your test Ether from your metamask wallet
+
+- Add Dai token to your metamask wallet using this contract address `0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea`
+
+- Spread 1 Ether each to the first 3 addresses on your Metamask wallet, and 250 Dai each also.
+
+- Get an Infura API key if don't have one from https://infura.io/
+
+- Run `truffle console --network rinkeby`
 
 - Run `test test/linear_curve_test.js` for Linear Bond Curve Token
 
