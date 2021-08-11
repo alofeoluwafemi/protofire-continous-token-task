@@ -111,7 +111,7 @@ contract ContinousToken is BancorFormula, ERC20 {
         uint256 amount = calculateContinuousMintReturn(_deposit);
         _mint(msg.sender, amount);
         reserveBalance = reserveBalance.add(_deposit);
-        emit ContinuousMint(msg.sender, amount, _deposit);
+        emit ContinuousMint(msg.sender, _deposit, amount);
         return amount;
     }
 

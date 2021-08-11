@@ -31,9 +31,7 @@ You must have the following installed on your Machine to run this code:
 
 - Run `test test/linear_curve_test.js` for Linear Bond Curve Token
 
-- Run `test test/exponential_curve_test.js` for Exponential Bond Curve Token
-
-## Setup Option 2 (Locally)
+## Setup Option 2 (Ganache)
 
 - Run everything locally using ganache-cli, and skip requesting Ether and Dai process
 
@@ -42,14 +40,12 @@ You must have the following installed on your Machine to run this code:
 ```
 ganache-cli \
 -m "coockle coockle coockle doole doole doole quack quack quack quack quack quack" \
--i 4 \
+-i 4
 ```
 
-- Replace the mnemonic passed to the `-m` with your own mnemonic and add the same mnemonic to your `secret.json` file
+- Replace the mnemonic passed to the `-m` option with your own mnemonic and add the same mnemonic to the `secret.json` file
 
 - Run `test test/linear_curve_test.js` for Linear Bond Curve Token
-
-- Run `test test/exponential_curve_test.js` for Exponential Bond Curve Token
 
 ## References
 
